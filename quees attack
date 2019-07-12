@@ -1,0 +1,202 @@
+#!/bin/python
+
+import math
+import os
+import random
+import re
+import sys
+
+# Complete the queensAttack function below.
+def obs_up(pos_row,pos_col,size_of_board,valid_obstacles):
+    i,j=pos_row,pos_col
+    while(i<size_of_board+1):
+        if([i,j] in obstacles):
+            valid_obstacles.append([i,j])
+            break
+        i+=1
+def obs_down(pos_row,pos_col,size_of_board,valid_obstacles):
+    i,j=pos_row,pos_col
+    while(i>0):
+        if([i,j] in obstacles):
+            valid_obstacles.append([i,j])
+            break
+        i-=1
+def obs_right(pos_row,pos_col,size_of_board,valid_obstacles):
+    i, j = pos_row, pos_col
+    while(j<size_of_board+1):
+        if([i,j] in obstacles):
+            valid_obstacles.append([i,j])
+            break
+        j+=1
+def obs_left(pos_row,pos_col,size_of_board,valid_obstacles):
+    i, j = pos_row, pos_col
+    while(j>0):
+        if([i,j] in obstacles):
+            valid_obstacles.append([i,j])
+            break
+        j-=1
+def obs_up_right(pos_row,pos_col,size_of_board,valid_obstacles):
+    i, j = pos_row, pos_col
+    while(i<size_of_board+1 and j<size_of_board+1):
+        if([i,j] in obstacles):
+            valid_obstacles.append([i,j])
+            break
+        i+=1
+        j+=1
+def obs_up_left(pos_row,pos_col,size_of_board,valid_obstacles):
+    i, j = pos_row, pos_col
+    while(i<size_of_board+1 and j>0):
+        if([i,j] in obstacles):
+            valid_obstacles.append([i,j])
+            break
+        i+=1
+        j-=1
+def obs_down_right(pos_row,pos_col,size_of_board,valid_obstacles):
+    i, j = pos_row, pos_col
+    while(i>0 and j<size_of_board+1):
+        if([i,j] in obstacles):
+            valid_obstacles.append([i,j])
+            break
+        i-=1
+        j+=1
+def obs_down_left(pos_row,pos_col,size_of_board,valid_obstacles):
+    i, j = pos_row, pos_col
+    while(i>0 and j>0):
+        if([i,j] in obstacles):
+            valid_obstacles.append([i,j])
+            break
+        i-=1
+        j-=1
+
+def up(pos,obstacle):
+    return (obstacle-pos-1)
+def down(pos,obstacle):
+    return (pos-obstacle-1)
+def right(pos,obstacle):
+    return (obstacle-pos-1)
+def left(pos,obstacle):
+    return (pos-obstacle-1)
+def up_right(obstacle_row,obstacle_column,pos_row,pos_col):
+    i,j=pos_row,pos_col
+    c=0
+    while(i<obstacle_row and j<obstacle_column):
+        i+=1
+        j+=1
+        c+=1
+    return c-1
+def up_left(obstacle_row,obstacle_column,pos_row,pos_col):
+    i,j=pos_row,pos_col
+    c=0
+    while(i<obstacle_row and j>obstacle_column):
+        i+=1
+        j-=1
+        c+=1
+    return c-1
+def down_right(obstacle_row,obstacle_column,pos_row,pos_col):
+    i, j = pos_row, pos_col
+    c=0
+    while(i>obstacle_row and j<obstacle_column):
+        i-=1
+        j+=1
+        c+=1
+    return c-1
+def down_left(obstacle_row,obstacle_column,pos_row,pos_col):
+    i, j = pos_row, pos_col
+    c=0
+    while(i>obstacle_row and j>obstacle_column):
+        i-=1
+        j-=1
+        c+=1
+    return c-1
+def queensAttack(n, k, r_q, c_q, obstacles):
+    position_queen_row=r_q
+    position_queen_column=c_q
+    size_of_board=n
+    row=size_of_board
+    column=size_of_board
+    obstacle_up=size_of_board+1
+    obstacle_down=0
+    obstacle_left=0
+    obstacle_right=size_of_board+1
+    obstacle_up_right_row=row+1
+    obstacle_up_right_column=column+1
+    obstacle_up_left_row=row+1
+    obstacle_up_left_column=0
+    obstacle_down_right_row=0
+    obstacle_down_right_column=column+1
+    obstacle_down_left_row=0
+    obstacle_down_left_column=0
+    # code start for valid obstacle sorting
+    
+    valid_obstacles=[]
+    obs_up(position_queen_row,position_queen_column,size_of_board,valid_obstacles)
+    obs_down(position_queen_row,position_queen_column,size_of_board,valid_obstacles)
+    obs_right(position_queen_row,position_queen_column,size_of_board,valid_obstacles)
+    obs_left(position_queen_row,position_queen_column,size_of_board,valid_obstacles)
+    obs_up_right(position_queen_row,position_queen_column,size_of_board,valid_obstacles)
+    obs_up_left(position_queen_row,position_queen_column,size_of_board,valid_obstacles)
+    obs_down_left(position_queen_row,position_queen_column,size_of_board,valid_obstacles)
+    obs_down_right(position_queen_row,position_queen_column,size_of_board,valid_obstacles)
+
+    # code end for valid obstacle sorting
+
+    for i in valid_obstacles:
+        if(i[1]==position_queen_column):
+            if(i[0]>position_queen_row):
+                obstacle_up=i[0]
+            if(i[0]<position_queen_row):
+                obstacle_down=i[0]
+        if(i[0]==position_queen_row):
+            if(i[1]>position_queen_column):
+                obstacle_right=i[1]
+            if(i[1]<position_queen_column):
+                obstacle_left=i[1]
+        if(i[1]>position_queen_column):
+            if(i[0]>position_queen_row):
+                obstacle_up_right_row=i[0]
+                obstacle_up_right_column=i[1]
+            if(i[0]<position_queen_row):
+                obstacle_down_right_row=i[0]
+                obstacle_down_right_column=i[1]
+        if(i[1]<position_queen_column):
+            if(i[0]>position_queen_row):
+                obstacle_up_left_row=i[0]
+                obstacle_up_left_column=i[1]
+            if(i[0]<position_queen_row):
+                obstacle_down_left_row=i[0]
+                obstacle_down_left_column=i[1]
+    count=0
+    count=count+up(position_queen_row,obstacle_up)
+    count=count+down(position_queen_row,obstacle_down)
+    count=count+right(position_queen_column,obstacle_right)
+    count=count+left(position_queen_column,obstacle_left)
+    count=count+up_right(obstacle_up_right_row,obstacle_up_right_column,position_queen_row,position_queen_column)
+    count=count+up_left(obstacle_up_left_row,obstacle_up_left_column,position_queen_row,position_queen_column)
+    count=count+down_right(obstacle_down_right_row,obstacle_down_right_column,position_queen_row,position_queen_column)
+    count=count+down_left(obstacle_down_left_row,obstacle_down_left_column,position_queen_row,position_queen_column)
+    return count
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+    nk = raw_input().split()
+
+    n = int(nk[0])
+
+    k = int(nk[1])
+
+    r_qC_q = raw_input().split()
+
+    r_q = int(r_qC_q[0])
+
+    c_q = int(r_qC_q[1])
+
+    obstacles = []
+    
+    for _ in xrange(k):
+        obstacles.append(map(int, raw_input().rstrip().split()))
+
+    result = queensAttack(n, k, r_q, c_q, obstacles)
+
+    fptr.write(str(result) + '\n')
+
+    fptr.close()
